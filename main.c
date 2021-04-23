@@ -151,6 +151,7 @@ int main() {
 
 
     void printCardDeck(){
+        //PrintCardDeck er rigtig meget work in progress. Derfor kan der sagtens være fejl hvis man bruger den
 
         bool nextPointer=true;
         char printCards[2][7];
