@@ -44,7 +44,13 @@ void printCardDeck();
 int main() {
     testCardDeck();
     createHeadNodes();
-    createShowCardDeck();
+    //createShowCardDeck();
+
+    insertAfter(&headArray[1].previousPointer,cardArray[1]);
+    insertAfter(&headArray[1].previousPointer,cardArray[2]);
+    insertAfter(&headArray[1].previousPointer,cardArray[3]);
+    insertAfter(&headArray[1].previousPointer,cardArray[4]);
+    insertAfter(&headArray[1].previousPointer,cardArray[5]);
     printCardDeck();
 
 
@@ -53,12 +59,8 @@ int main() {
     void createHeadNodes(){
     //Laver de 7 fiktive head noder
         for (int i = 0; i < 7; ++i) {
-            //Her oprette 7 fitkive HEAD noder. Index 0 svare til C1 og index 6 svare til C7
-            struct node tempNode;
-            tempNode.nodeCard=NULL;
-            tempNode.nextPointer=&tempNode;
-            tempNode.previousPointer=&tempNode;
-            headArray[i]=tempNode;
+            headArray[i].nextPointer=&headArray[i];
+            headArray[i].previousPointer=&headArray[i];
         }
 }
 
@@ -66,7 +68,8 @@ int main() {
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
 
-            insertAfter(&headArray[x].previousPointer,&cardArray[i]);
+            insertAfter(&headArray[x].previousPointer,cardArray[i]);
+
             struct card testTempCard = cardArray[i];
 
 
@@ -75,19 +78,19 @@ int main() {
 
 
 
-    void insertAfter(struct node *prevNode,struct card newCardPointer){
+    void insertAfter(struct node *prevNode,struct card* newCardPointer){
        if(prevNode==NULL){
             printf("Tidligere node er NULL");
             return;
         }
 
        //Opretter en ny node og allokere plads i memory til den
-        struct node *newNode=(struct node*)malloc(sizeof (struct node));
+        struct node* newNode=(struct node*)malloc(sizeof (struct node));
 
-        newNode->nodeCard=&newCardPointer;
+       newNode->nodeCard=newCardPointer;
 
 
-        newNode->nextPointer=prevNode->nextPointer;
+       newNode->nextPointer=prevNode->nextPointer;
 
         //nextPointer i noden før, peger nu hen til den nye nuværende node
         prevNode->nextPointer=newNode;
