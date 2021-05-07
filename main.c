@@ -42,19 +42,11 @@ struct card cardArray[52];
 void printCardDeck();
 
 int main() {
-
-    //struct node *ptrNode;
-    //ptrNode= (struct node*) malloc(59*sizeof node);
-
     testCardDeck();
     createHeadNodes();
-    //createShowCardDeck();
-    for (int i = 0; i < 52; ++i) {
-        printf("Rank %d, suit: %d, isFaceUp: %d \n", cardArray[i].rank,cardArray[i].suit,cardArray[i].isFaceUp);
-    }
-    insertAfter(headArray[0].previousPointer,cardArray[0]);
-    insertAfter(headArray[0].previousPointer,cardArray[1]);
+    createShowCardDeck();
     printCardDeck();
+
 }
 
     void createHeadNodes(){
@@ -70,7 +62,7 @@ int main() {
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
 
-            insertAfter(&headArray[x].previousPointer,cardArray[i]);
+            insertAfter(headArray[x].previousPointer,&cardArray[i]);
 
             struct card testTempCard = cardArray[i];
 
@@ -101,10 +93,6 @@ int main() {
         if(newNode->nextPointer!=NULL){
             newNode->nextPointer->previousPointer=newNode;
         }
-
-        //TODO Skal fjernes. Vi tester her at alle noderne rent faktisk får et kort tildelt
-        //printf("Rank:%d ,Suit: %d, isFaceUp:%d \n",newNode->nodeCard->rank,newNode->nodeCard->suit,newNode->nodeCard->isFaceUp);
-
 }
 
     void testCardDeck(){
@@ -133,26 +121,16 @@ int main() {
 
 }
 
-
     void printCardDeck(){
-        //PrintCardDeck er rigtig meget work in progress. Derfor kan der sagtens være fejl hvis man bruger den
-
+        //Printer linked listerne som de ser ud.
+        int numberOfNULLNodeCards = 0;
         bool nextPointer=true;
-        //Er måske overflødig
-        //char printCards[2][7];
         struct node tempCurrentNode[7];
 
         for (int i = 0; i < 7; ++i) {
             //Vi arbejder med fiktive head nodes. Derfor vil vi gerne have at den første node er den første reele node med et kort.
             if(headArray[i].nextPointer!=NULL){
-
-                //TODO Hvorfor fejler det her?! Hvorfor er nodeCard=NULL i tempTestNode, når vi debugger. Det tyder jo på at vi får fat i vores fiktive HEAD nodes og ikke det rigtige første element
-                struct node tempTestNode=*headArray[i].nextPointer;
-                struct card tempTestCard=*tempTestNode.nodeCard;
-                printf("Rank: %d,\n",tempTestCard.rank);
                 tempCurrentNode[i]=*headArray[i].nextPointer;
-            }else{
-                printf("Nextpointer var NULL, i=%d\n",i);
             }
         }
 
@@ -160,46 +138,46 @@ int main() {
         printf("\n");
 
         int j =1;
-         while(j==1){
+         while(nextPointer==true){
              for (int i = 0; i < 7; ++i) {
                  if(tempCurrentNode[i].nodeCard != NULL){
 
                     struct card tempCard = *tempCurrentNode[i].nodeCard;
 
-                     char tempCardSuit = tempCard.suit;
-                     int tempCardRank = tempCard.rank;
-
-
-                      printf("tempCard isFaceUp: %d",tempCard.isFaceUp);
                       if(tempCard.isFaceUp){
                           //Hvis kortet ikke er skjult
-                          if(card.rank==1){
-                              //char tempChar[2] = "A";
-                              //printf(strcat(tempChar, tempCardSuit));
-
+                          if(tempCard.rank==1){
+                              printf("A%c",tempCard.suit);
                           }else if(card.rank==10){
-
+                              printf("T%c",tempCard.suit);
                           }else if(card.rank==11){
-
+                            printf("J%c",tempCard.suit);
                           }else if(card.rank==12){
-
+                              printf("D%c",tempCard.suit);
                           }else if(card.rank==13){
-
+                              printf("K%c",tempCard.suit);
                           }else{
-
+                                printf("%d%c",tempCard.rank,tempCard.suit);
                           }
-
                       }else{
                           //Hvis kortet er skjult
-                          //char tempChar= "[]";
-                          //printCards[2][i]=tempChar;
+                          printf("[]");
                       }
 
-            }
+                      tempCurrentNode[i]=*tempCurrentNode[i].nextPointer;
+
+            }else{
+                     //Vi tæller hvor mange gange vi har et NULL card. Hvis alle 7 har NULL card betyder det at vi har været hele listen igennem da vi dermed har ramt head node igen
+                    numberOfNULLNodeCards=numberOfNULLNodeCards+1;
+                    if(numberOfNULLNodeCards==7){
+                        nextPointer=false;
+                    }
+                 }
+                 printf("\t");
         }
-             j=2;
-        //printf("");
-        //nextPointer=false;
+             //Vi nulstiller antallet af NULL card hver gang
+             numberOfNULLNodeCards=0;
+             printf("\n");
     }
 
 
