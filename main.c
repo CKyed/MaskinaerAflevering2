@@ -3,12 +3,16 @@
 #include <stdbool.h>
 #include <string.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <time.h>
 
 void printCardDeck();
-void testCardDeck();
+void createCardDeck();
 void createHeadNodes();
 void createShowCardDeck();
 void createNewCardGame();
+void swapCards(int a, int b);
+void randomShuffel();
 
 //Vi skal nok ikke bruge push til noget
 void push();
@@ -42,10 +46,14 @@ struct card cardArray[52];
 void printCardDeck();
 
 int main() {
-    testCardDeck();
+    time_t t;
+    srand((unsigned) time(&t));
+    createCardDeck();
     createHeadNodes();
+    randomShuffel();
     createShowCardDeck();
     printCardDeck();
+    printf("Brekpoint");
 
 }
 
@@ -61,12 +69,7 @@ int main() {
     void createShowCardDeck(){
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
-
             insertAfter(headArray[x].previousPointer,&cardArray[i]);
-
-            struct card testTempCard = cardArray[i];
-
-
         }
 }
 
@@ -95,7 +98,7 @@ int main() {
         }
 }
 
-    void testCardDeck(){
+    void createCardDeck(){
     //Test card skal kun oprette 52 kort og putte det ind i vores cardArray.
         char tempChar='H';
         int tempInt=0;
@@ -182,5 +185,57 @@ int main() {
 
 
 
+}
+
+    void randomShuffel(){
+        //Opgave 4
+        //Laver et midlertidigt kort array
+        struct card tempCardArray[52];
+        //Putter data ind i det midlertidige kort array
+        for (int i = 0; i < 52; ++i) {
+            tempCardArray[i].rank=0;
+            tempCardArray[i].suit= 'f';
+            tempCardArray[i].isFaceUp=false;
+        }
+
+        //Undersøger om næste element i bunken er tomt. Hvis det er putter den kortet her, hvis ikke undersøge den det næste igen, indtil den finder et tom plads.
+        //Stopper når den har fundet en tom plads at ligge kortet på.
+        for (int i = 0; i < 52; ++i) {
+            int randomNumber = (rand()%51);
+            //Hvis der ikke allerede ligger et kort på den position
+            if(!(tempCardArray[randomNumber].rank>0)){
+                tempCardArray[randomNumber].rank=cardArray[i].rank;
+                tempCardArray[randomNumber].suit=cardArray[i].suit;
+                tempCardArray[randomNumber].isFaceUp=cardArray[i].isFaceUp;
+            }else{
+                //Hvis der ligger et kort på den oprindelige possition
+                int tempNumber=randomNumber;
+                for (int j = 0; j < 52; ++j) {
+                    //Hvis det index nummeret er det sidste i bunken, starter den fra 0 istedet
+                    if(tempNumber == 51){
+                        tempNumber=0;
+                    }else{
+                        //Hvis det ikke er det sidste element i bunken undersøger den næste element
+                        tempNumber=tempNumber+1;
+                    }
+
+                    //Hvis det element der undersøges er tomt, gemmes kortet her.
+                    if(!(tempCardArray[tempNumber].rank > 0)){
+                        tempCardArray[tempNumber].rank=cardArray[i].rank;
+                        tempCardArray[tempNumber].suit=cardArray[i].suit;
+                        tempCardArray[tempNumber].isFaceUp=cardArray[i].isFaceUp;
+                        //Sørger for at for loopet stopper
+                        j=52;
+                    }
+                }
+            }
+        }
+
+        //Gemmer kortet i vores oprindelige kort array
+        for (int i = 0; i <52; ++i) {
+            cardArray[i].rank=tempCardArray[i].rank;
+            cardArray[i].suit=tempCardArray[i].suit;
+            cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
+        }
 }
 
