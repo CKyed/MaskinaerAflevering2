@@ -26,11 +26,11 @@ struct card{
 struct node{
     //Hver node indeholder 3 pointers
     //En pointer der peger hen på et specifikt kort
-   struct card *nodeCard;
+   struct card* nodeCard;
    //En pointer der peger hen på det næste kort
-   struct node *nextPointer;
+   struct node* nextPointer;
    //En pointer der peger hen på kortet før
-   struct node *previousPointer;
+   struct node* previousPointer;
 
 }node;
 
@@ -42,23 +42,25 @@ struct card cardArray[52];
 void printCardDeck();
 
 int main() {
+
+    //struct node *ptrNode;
+    //ptrNode= (struct node*) malloc(59*sizeof node);
+
     testCardDeck();
     createHeadNodes();
     //createShowCardDeck();
-
-    insertAfter(&headArray[1].previousPointer,cardArray[1]);
-    insertAfter(&headArray[1].previousPointer,cardArray[2]);
-    insertAfter(&headArray[1].previousPointer,cardArray[3]);
-    insertAfter(&headArray[1].previousPointer,cardArray[4]);
-    insertAfter(&headArray[1].previousPointer,cardArray[5]);
+    for (int i = 0; i < 52; ++i) {
+        printf("Rank %d, suit: %d, isFaceUp: %d \n", cardArray[i].rank,cardArray[i].suit,cardArray[i].isFaceUp);
+    }
+    insertAfter(headArray[0].previousPointer,cardArray[0]);
+    insertAfter(headArray[0].previousPointer,cardArray[1]);
     printCardDeck();
-
-
 }
 
     void createHeadNodes(){
     //Laver de 7 fiktive head noder
         for (int i = 0; i < 7; ++i) {
+            //printf("Adresse for i=%d %d \n",i,&headArray[i]);
             headArray[i].nextPointer=&headArray[i];
             headArray[i].previousPointer=&headArray[i];
         }
@@ -76,8 +78,6 @@ int main() {
         }
 }
 
-
-
     void insertAfter(struct node *prevNode,struct card* newCardPointer){
        if(prevNode==NULL){
             printf("Tidligere node er NULL");
@@ -85,10 +85,10 @@ int main() {
         }
 
        //Opretter en ny node og allokere plads i memory til den
-        struct node* newNode=(struct node*)malloc(sizeof (struct node));
+       struct node* newNode=(struct node*)malloc(sizeof (struct node));
+       //struct node newNode;
 
        newNode->nodeCard=newCardPointer;
-
 
        newNode->nextPointer=prevNode->nextPointer;
 
@@ -103,7 +103,7 @@ int main() {
         }
 
         //TODO Skal fjernes. Vi tester her at alle noderne rent faktisk får et kort tildelt
-        printf("Rank:%d ,Suit: %d, isFaceUp:%d \n",newNode->nodeCard->rank,newNode->nodeCard->suit,newNode->nodeCard->isFaceUp);
+        //printf("Rank:%d ,Suit: %d, isFaceUp:%d \n",newNode->nodeCard->rank,newNode->nodeCard->suit,newNode->nodeCard->isFaceUp);
 
 }
 
@@ -130,6 +130,7 @@ int main() {
             }
             tempInt=tempInt+13;
         }
+
 }
 
 
