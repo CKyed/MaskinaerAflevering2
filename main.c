@@ -121,7 +121,6 @@ int main() {
             }
             tempInt=tempInt+13;
         }
-
 }
 
     void printCardDeck(){
@@ -136,12 +135,10 @@ int main() {
                 tempCurrentNode[i]=*headArray[i].nextPointer;
             }
         }
-
         printf("C1\tC2\tC3\tC4\tC5\tC6\tC7");
         printf("\n");
 
-        int j =1;
-         while(nextPointer==true){
+        while(nextPointer==true){
              for (int i = 0; i < 7; ++i) {
                  if(tempCurrentNode[i].nodeCard != NULL){
 
@@ -166,9 +163,7 @@ int main() {
                           //Hvis kortet er skjult
                           printf("[]");
                       }
-
                       tempCurrentNode[i]=*tempCurrentNode[i].nextPointer;
-
             }else{
                      //Vi tæller hvor mange gange vi har et NULL card. Hvis alle 7 har NULL card betyder det at vi har været hele listen igennem da vi dermed har ramt head node igen
                     numberOfNULLNodeCards=numberOfNULLNodeCards+1;
@@ -182,9 +177,6 @@ int main() {
              numberOfNULLNodeCards=0;
              printf("\n");
     }
-
-
-
 }
 
     void randomShuffel(){
@@ -238,4 +230,3 @@ int main() {
             cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
         }
 }
-
