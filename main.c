@@ -46,8 +46,10 @@ struct card cardArray[52];
 void printCardDeck();
 
 int main() {
+    //Sørger for at randomShuffel funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
+
     createCardDeck();
     createHeadNodes();
     randomShuffel();
