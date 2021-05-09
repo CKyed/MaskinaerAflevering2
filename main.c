@@ -56,6 +56,7 @@ int main() {
     //Sørger for at randomShuffel funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
+    //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
 
     userInterface();
@@ -102,14 +103,14 @@ int main() {
     //2 SW
     int sw(){
     if(cardArray[0].rank==0){
+        //Hvis der ikke er nogle kort i bunken
         return 0;
     }else{
+        //Hvis der er kort i bunken
         createShowCardDeck();
         printCardDeck();
         return 1;
     }
-
-
 }
 
     //Hjælpe funktioner
