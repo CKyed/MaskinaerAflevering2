@@ -55,8 +55,11 @@ int main() {
     randomShuffel();
     createShowCardDeck();
     printCardDeck();
+
     printf("Brekpoint");
 
+    //Exit bruger vi til opgave 6.
+    exit(0);
 }
 
     void createHeadNodes(){
@@ -128,6 +131,7 @@ int main() {
     void printCardDeck(){
         //Printer linked listerne som de ser ud.
         int numberOfNULLNodeCards = 0;
+        int counter = 0;
         bool nextPointer=true;
         struct node tempCurrentNode[7];
 
@@ -138,7 +142,8 @@ int main() {
             }
         }
         printf("C1\tC2\tC3\tC4\tC5\tC6\tC7");
-        printf("\n");
+        printf("\n\n");
+
 
         while(nextPointer==true){
              for (int i = 0; i < 7; ++i) {
@@ -175,9 +180,14 @@ int main() {
                  }
                  printf("\t");
         }
+             if(counter==0||counter==2||counter==4||counter==6){
+                 int fValue=(counter/2)+1;
+                 printf("\t\t[]\tF%d",fValue);
+             }
              //Vi nulstiller antallet af NULL card hver gang
              numberOfNULLNodeCards=0;
              printf("\n");
+             counter=counter+1;
     }
 }
 
