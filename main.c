@@ -68,44 +68,75 @@ int main() {
 
     //User interfaceet
     void userInterface(){
-        //Test int
-        int j =0;
+        int running =1;
+        int startUp=1;
+        int playing=0;
 
         char *lastCommand,*message;
         char str[2];
         lastCommand="No last command";
         message="no message";
-        while (j<4){
+        while (running==1){
 
-            printf("LAST Command: %s\n",lastCommand);
-            printf("Message: %s\n",message);
-            printf( "Input: ");
-            gets(str);
 
-            if(0== strcmp(str,"SW")){
-                lastCommand="SW";
-                if(sw()==0){
-                    message="No cards in deck";
-                }else{
-                    message="OK";
+
+            //Startup fasen
+            while (startUp==1){
+                printf("LAST Command: %s\n",lastCommand);
+                printf("Message: %s\n",message);
+                printf( "Input: ");
+                gets(str);
+
+                if(0==strcmp(str,"SW")){
+                    lastCommand="SW";
+                    if(sw()==0){
+                        message="No cards in deck";
+                    }else{
+                        message="OK";
+                    }
+
                 }
 
+                if(0==strcmp(str,"SR")){
+                    //Tager ikke højde for om kort dækket er tomt, da det ikke står i opgaven. Vil være let er implementere, lige som i SW.
+                    lastCommand="SR";
+                    message="OK";
+                    sr();
+                }
+
+                if(0== strcmp(str,"QQ")){
+                    //Lukker programmet
+                    running=0;
+                }
+
+                if(0== strcmp(str,"P")){
+                    //Programmet går nu fra startup fasen til spille fasen
+                    message="Du er nu i spille fasen";
+                    lastCommand="P";
+                    startUp=0;
+                    playing=1;
+                }
             }
 
-            if(0==strcmp(str,"SR")){
-                //Tager ikke højde for om kort dækket er tomt, da det ikke står i opgaven. Vil være let er implementere, lige som i SW.
-                lastCommand="SR";
-                message="OK";
-                sr();
+            //Spille fasen
+            while(playing==1){
+                printf("LAST Command: %s\n",lastCommand);
+                printf("Message: %s\n",message);
+                printf( "Input: ");
+                gets(str);
+
+                if(0== strcmp(str,"Q")){
+                    //Vi går fra spille delen tilbage til startup fasen
+                    //Da vores kortspil er gemt i et array som ikke bliver brugt til andet en at opbevare dens oprindelig stadie i behøver vi ikke at gøre yderligere
+                    message="Du er nu i startup fasen";
+                    lastCommand="Q";
+                    playing=0;
+                    startUp=1;
+                }
             }
 
-            if(0== strcmp(str,"QQ")){
-                //Lukker programmet ned med exitcode 0
-                exit(0);
-            }
-
-                j=j+1;
         }
+
 
     }
 
