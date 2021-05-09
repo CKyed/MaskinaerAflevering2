@@ -10,6 +10,7 @@ void printCardDeck();
 void createCardDeck();
 void createHeadNodes();
 void createShowCardDeck();
+void createGameCardDeck();
 void createNewCardGame();
 void swapCards(int a, int b);
 void randomShuffel();
@@ -52,8 +53,7 @@ int main() {
 
     createCardDeck();
     createHeadNodes();
-    randomShuffel();
-    createShowCardDeck();
+    createGameCardDeck();
     printCardDeck();
 
     printf("Brekpoint");
@@ -76,6 +76,43 @@ int main() {
             int x = i%7;
             insertAfter(headArray[x].previousPointer,&cardArray[i]);
         }
+}
+
+    void createGameCardDeck(){
+    insertAfter(headArray[0].previousPointer,&cardArray[0]);
+        int tempI;
+        for (int i = 1; i < 7; ++i) {
+            tempI=i;
+            for (int j = 0; j < 6; ++j) {
+                if(j<i){
+                    cardArray[tempI].isFaceUp=false;
+                }
+                insertAfter(headArray[i].previousPointer,&cardArray[tempI]);
+                tempI=tempI+6;
+            }
+        }
+        //Prøvede at lave et loop for det her, men det viser sig ikke at være lige til. Derfor er det nemmere og bare at indtaste det manuelt.
+        //I sidste ende er det alligevel det sammen og gør ingen forskel
+        insertAfter(headArray[2].previousPointer,&cardArray[37]);
+
+        insertAfter(headArray[3].previousPointer,&cardArray[42]);
+        insertAfter(headArray[3].previousPointer,&cardArray[38]);
+
+        insertAfter(headArray[4].previousPointer,&cardArray[39]);
+        insertAfter(headArray[4].previousPointer,&cardArray[43]);
+        insertAfter(headArray[4].previousPointer,&cardArray[46]);
+
+        insertAfter(headArray[5].previousPointer,&cardArray[40]);
+        insertAfter(headArray[5].previousPointer,&cardArray[44]);
+        insertAfter(headArray[5].previousPointer,&cardArray[47]);
+        insertAfter(headArray[5].previousPointer,&cardArray[49]);
+
+        insertAfter(headArray[6].previousPointer,&cardArray[41]);
+        insertAfter(headArray[6].previousPointer,&cardArray[45]);
+        insertAfter(headArray[6].previousPointer,&cardArray[48]);
+        insertAfter(headArray[6].previousPointer,&cardArray[50]);
+        insertAfter(headArray[6].previousPointer,&cardArray[51]);
+
 }
 
     void insertAfter(struct node *prevNode,struct card* newCardPointer){
@@ -242,3 +279,4 @@ int main() {
             cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
         }
 }
+
