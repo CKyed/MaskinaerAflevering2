@@ -13,6 +13,7 @@ void createShowCardDeck();
 void createNewCardGame();
 void swapCards(int a, int b);
 void randomShuffel();
+void splitCardDeck();
 
 //Vi skal nok ikke bruge push til noget
 void push();
@@ -241,4 +242,17 @@ int main() {
             cardArray[i].suit=tempCardArray[i].suit;
             cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
         }
+}
+
+    void splitCardDeck(){
+        //Laver 3 head nodes til de 3 bunker af kort vi kommer til at have
+        struct node splitHeadArray[3];
+
+        //Initialiserer linked listen på de 3 head nodes
+        for (int i = 0; i < 3; ++i) {
+            //printf("Adresse for i=%d %d \n",i,&headArray[i]);
+            splitHeadArray[i].nextPointer=&headArray[i];
+            splitHeadArray[i].previousPointer=&headArray[i];
+        }
+
 }
