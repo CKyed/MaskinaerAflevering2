@@ -97,24 +97,27 @@ int main() {
 
                 }
 
-                if(0==strcmp(str,"SR")){
+                else if(0==strcmp(str,"SR")){
                     //Tager ikke højde for om kort dækket er tomt, da det ikke står i opgaven. Vil være let er implementere, lige som i SW.
                     lastCommand="SR";
                     message="OK";
                     sr();
                 }
 
-                if(0== strcmp(str,"QQ")){
+                else if(0== strcmp(str,"QQ")){
                     //Lukker programmet
                     running=0;
                 }
 
-                if(0== strcmp(str,"P")){
+                else if(0== strcmp(str,"P")){
                     //Programmet går nu fra startup fasen til spille fasen
                     message="Du er nu i spille fasen";
                     lastCommand="P";
                     startUp=0;
                     playing=1;
+                }else{
+                    lastCommand="Ukendt kommando";
+                    message="Ukendt kommando";
                 }
             }
 
@@ -132,12 +135,13 @@ int main() {
                     lastCommand="Q";
                     playing=0;
                     startUp=1;
+                }else{
+                    lastCommand="Ukendt kommando";
+                    message="Ukendt kommando";
                 }
             }
 
         }
-
-
     }
 
     //Funktioner
