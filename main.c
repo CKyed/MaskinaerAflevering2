@@ -79,14 +79,21 @@ int main() {
 }
 
     void createGameCardDeck(){
+    //Laver linked listen der skal bruges til spillet;
+    //Det første element tiløjes
     insertAfter(headArray[0].previousPointer,&cardArray[0]);
         int tempI;
+
+        //Hvis der tages udgangspunkt i et ublandet kortdæk(Den vidst i opgave beskrivelsen) tilføjes kortene op til QH.
+        //De kort der skal være faceDown bliver sat til det
         for (int i = 1; i < 7; ++i) {
             tempI=i;
             for (int j = 0; j < 6; ++j) {
+                //Hvis kortet ikke er faceUp bliver den sat til false
                 if(j<i){
                     cardArray[tempI].isFaceUp=false;
                 }
+                //Tilføjer kortene til vores linked list
                 insertAfter(headArray[i].previousPointer,&cardArray[tempI]);
                 tempI=tempI+6;
             }
