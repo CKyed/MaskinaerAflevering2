@@ -6,14 +6,20 @@
 #include <stdlib.h>
 #include <time.h>
 
+//Hjælpe funktioner
 void printCardDeck();
 void createCardDeck();
 void createHeadNodes();
 void createShowCardDeck();
 void createGameCardDeck();
 void createNewCardGame();
-void swapCards(int a, int b);
 void randomShuffel();
+
+//User interface
+void userInterface();
+
+//Endelige funktioner
+int sw();
 
 //Vi skal nok ikke bruge push til noget
 void push();
@@ -50,18 +56,63 @@ int main() {
     //Sørger for at randomShuffel funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
-
-    createCardDeck();
     createHeadNodes();
-    createGameCardDeck();
-    printCardDeck();
 
-    printf("Brekpoint");
+    userInterface();
+
 
     //Exit bruger vi til opgave 6.
     exit(0);
 }
 
+    //User interfaceet
+    void userInterface(){
+        //Test int
+        int j =0;
+
+        char *lastCommand,*message;
+        char str[2];
+        lastCommand="No last command";
+        message="no message";
+        while (j<2){
+
+            printf("LAST Command: %s\n",lastCommand);
+            printf("Message: %s\n",message);
+            printf( "Input: ");
+            gets(str);
+
+            if(0== strcmp(str,"SW")){
+                lastCommand="SW";
+                if(sw()==0){
+                    message="No cards in deck";
+                }else{
+                    message="OK";
+                }
+
+            }
+
+
+                j=j+1;
+        }
+
+    }
+
+    //Funktioner
+
+    //2 SW
+    int sw(){
+    if(cardArray[0].rank==0){
+        return 0;
+    }else{
+        createShowCardDeck();
+        printCardDeck();
+        return 1;
+    }
+
+
+}
+
+    //Hjælpe funktioner
     void createHeadNodes(){
     //Laver de 7 fiktive head noder
         for (int i = 0; i < 7; ++i) {
@@ -199,13 +250,13 @@ int main() {
                           //Hvis kortet ikke er skjult
                           if(tempCard.rank==1){
                               printf("A%c",tempCard.suit);
-                          }else if(card.rank==10){
+                          }else if(tempCard.rank==10){
                               printf("T%c",tempCard.suit);
-                          }else if(card.rank==11){
+                          }else if(tempCard.rank==11){
                             printf("J%c",tempCard.suit);
-                          }else if(card.rank==12){
+                          }else if(tempCard.rank==12){
                               printf("D%c",tempCard.suit);
-                          }else if(card.rank==13){
+                          }else if(tempCard.rank==13){
                               printf("K%c",tempCard.suit);
                           }else{
                                 printf("%d%c",tempCard.rank,tempCard.suit);
@@ -286,4 +337,6 @@ int main() {
             cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
         }
 }
+
+
 
