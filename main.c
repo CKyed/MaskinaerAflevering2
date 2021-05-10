@@ -192,6 +192,7 @@ int main() {
 
         //Undersøger om næste element i bunken er tomt. Hvis det er putter den kortet her, hvis ikke undersøge den det næste igen, indtil den finder et tom plads.
         //Stopper når den har fundet en tom plads at ligge kortet på.
+        //TODO: skal det ik være rand()%52? Vælger den ik et random number fra 0 - 51 så?
         for (int i = 0; i < 52; ++i) {
             int randomNumber = (rand()%51);
             //Hvis der ikke allerede ligger et kort på den position
