@@ -13,7 +13,8 @@ void createShowCardDeck();
 void createNewCardGame();
 void swapCards(int a, int b);
 void randomShuffel();
-void splitCardDeck();
+void splitCardDeck(int split);
+void deleteNode();
 
 //Vi skal nok ikke bruge push til noget
 void push();
@@ -244,7 +245,7 @@ int main() {
         }
 }
 
-    void splitCardDeck(){
+    void splitCardDeck(int split){
         //Laver 3 head nodes til de 3 bunker af kort vi kommer til at have
         struct node splitHeadArray[3];
 
@@ -254,5 +255,54 @@ int main() {
             splitHeadArray[i].nextPointer=&headArray[i];
             splitHeadArray[i].previousPointer=&headArray[i];
         }
+        //hvis parameter ikke bliver givet
+        if(!split){
+            //første halvdel af kortene bliver lagt i en stack
+            for(int i = 0; i < 26; i++){
+                insertAfter(splitHeadArray[0].previousPointer,&cardArray[i]);
+            }
+            //anden halvdel af kortene bliver lagt i en anden stack
+            for(int i = 27; i < 52; i++){
+                insertAfter(splitHeadArray[1].previousPointer,&cardArray[i]);
+            }
+            //vi ska ha det sidste kort fra hver stack hen i den sidste stack, indtil der ik er flere kort
+            for(int i = 0; i < 52; i++){
+                if(i % 2 == 0){
+                    for(int j = 0; j < 26; j++){
+                        if(splitHeadArray[0].nextPointer->nodeCard == NULL){
+                            insertAfter(splitHeadArray[2].previousPointer, (struct card *) &splitHeadArray[0].nodeCard);
+                            deleteNode();
+                        }
 
+                    }
+
+                }
+                else{
+
+                }
+            }
+        }
+        //hvis parameter bliver givet
+        else{
+
+        }
+
+}
+
+    void deleteNode(struct node** headNode, struct node* del){
+    //base case
+        if(*headNode == NULL || del == NULL)
+            return;
+        //hvis noden der skal slettes er headnode
+        if(*headNode == del)
+            *headNode = del->nextPointer;
+        //Ændrer nextpointer hvis noden der skal slettes ikke er den sidste node
+        if(del->nextPointer != NULL)
+            del->nextPointer->previousPointer = del->previousPointer;
+        //Ændrer prevpointer hvis noden der skal slettes ikke er den første node
+        if(del->previousPointer != NULL)
+            del->previousPointer->nextPointer = del->nextPointer;
+        //Frigør memory
+        free(del);
+        return;
 }
