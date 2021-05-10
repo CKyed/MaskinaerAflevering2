@@ -15,7 +15,7 @@ void createShowCardDeck();
 void createGameCardDeck();
 void createNewCardGame();
 int loadFile();
-int saveFile();
+void saveFile();
 
 //User interface
 void userInterface();
@@ -57,8 +57,10 @@ void printCardDeck();
 
 int main() {
     //Test fil placering
-    char tempChar[] = "E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt";
-    ld(tempChar);
+    //char tempChar[] = "E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt";
+    //ld(tempChar);
+    createCardDeck();
+    sd();
     printf("breakpoint");
     /*
     //Sørger for at sr funktionen har et nyt random seed hver gang
@@ -228,6 +230,16 @@ int main() {
     }
 
     //5 SD
+    void sd(char *fileName){
+    if(fileName!=NULL){
+        saveFile(fileName);
+    }else{
+        //TODO Hvad gør vi med denne mappestruktur når vi ikke kender brugerens mapper?
+        saveFile("C:\\Users\\Public\\cards.txt");
+    }
+
+
+}
 
     //Hjælpe funktioner
     void createHeadNodes(){
@@ -451,15 +463,32 @@ int main() {
     fclose(fp);
     return returnNumber;
 }
-/*
-    int saveFile(char *fileName){
+
+    void saveFile(char *fileName){
         FILE *fp;
 
-        fp = fopen("%s",fileName);
+        fp = fopen(("%s",fileName),"w+");
+
         for (int i = 0; i < 52; ++i) {
-            fputs()
+            char tempSuit = cardArray[i].suit;
+            int tempInt=cardArray[i].rank;
+
+            if(1<tempInt && tempInt<10){
+                fprintf(fp,"%d%c\n",tempInt,tempSuit);
+            }else if(tempInt==1){
+                fprintf(fp,"A%c\n",tempSuit);
+            }
+            else if(tempInt==10){
+                fprintf(fp,"T%c\n",tempSuit);
+            }else if(tempInt==11){
+                fprintf(fp,"J%c\n",tempSuit);
+            }else if(tempInt==12){
+                fprintf(fp,"Q%c\n",tempSuit);
+            }else if(tempInt==13){
+                fprintf(fp,"K%c\n",tempSuit);
+            }
         }
+        fclose(fp);
+}
 
-    }
 
-*/
