@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 //Hjælpe funktioner
 void printCardDeck();
@@ -13,7 +14,8 @@ void createHeadNodes();
 void createShowCardDeck();
 void createGameCardDeck();
 void createNewCardGame();
-
+int loadFile();
+int saveFile();
 
 //User interface
 void userInterface();
@@ -21,13 +23,14 @@ void userInterface();
 //Endelige funktioner
 int sw();
 void sr();
+void sd();
+void ld();
+
 
 //Vi skal nok ikke bruge push til noget
 void push();
 void insertAfter();
 void append();
-
-
 
 struct card{
     char suit;
@@ -43,7 +46,6 @@ struct node{
    struct node* nextPointer;
    //En pointer der peger hen på kortet før
    struct node* previousPointer;
-
 }node;
 
 //Et array af 7 pointers til HEAD i hver af de 7 linklister
@@ -54,16 +56,20 @@ struct card cardArray[52];
 void printCardDeck();
 
 int main() {
+    //Test fil placering
+    char tempChar[] = "E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt";
+    ld(tempChar);
+    printf("breakpoint");
+    /*
     //Sørger for at sr funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
     createCardDeck();
+    createShowCardDeck();
     userInterface();
-
-
-
+     */
 }
 
     //User interfaceet
@@ -145,7 +151,15 @@ int main() {
     }
 
     //Funktioner
-    //LD<filename>
+    //1 LD<filename>
+    void ld(char *fileName){
+    if(fileName!=NULL){
+        loadFile(fileName);
+    }else{
+        createCardDeck();
+    }
+
+}
 
     //2 SW
     int sw(){
@@ -212,6 +226,8 @@ int main() {
             cardArray[i].isFaceUp=tempCardArray[i].isFaceUp;
         }
     }
+
+    //5 SD
 
     //Hjælpe funktioner
     void createHeadNodes(){
@@ -387,7 +403,63 @@ int main() {
     }
 }
 
+    int loadFile(char *fileName) {
+    //TODO Mangler check for om filen kan findes. Hvis den ikke findes skal den returnere 0. Kan godt undværes da vi tjekker for det i ld
+    FILE  *fp;
+    int c;
+    //i bruges til at indsætte kortet i indexet i array
+    int i=0;
+    //counter bruges til at holde styr på hvilket element vi kigger på, på hver linje
+    int counter=0;
+    int returnNumber;
+    fp = fopen(("%s",fileName),"r");
 
+    while(1){
 
+        c= fgetc(fp);
+        printf("%c",c);
+        if(feof(fp)){
+            returnNumber=1;
+            break;
+        }
+        if(counter==0){
+            //Hvis der er et bogstav bliver det konverteret til den rigtige rank
+            if(49<c && c<58){
+                cardArray[i].rank=(c-48);
+            }else if(c==65){
+                cardArray[i].rank=1;
+            }else if(c==84){
+                cardArray[i].rank=10;
+            }else if(c==74){
+                cardArray[i].rank=11;
+            }else if(c==81){
+                cardArray[i].rank=12;
+            }else if(c==75){
+                cardArray[i].rank=13;
+            }
 
+            counter=counter+1;
+        }else if(counter==1){
+            cardArray[i].suit=c;
+            counter=counter+1;
+        }else if(counter==2){
+            counter=0;
+            i=i+1;
+        }
 
+    }
+    fclose(fp);
+    return returnNumber;
+}
+/*
+    int saveFile(char *fileName){
+        FILE *fp;
+
+        fp = fopen("%s",fileName);
+        for (int i = 0; i < 52; ++i) {
+            fputs()
+        }
+
+    }
+
+*/
