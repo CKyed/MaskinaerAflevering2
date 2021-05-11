@@ -16,8 +16,9 @@ void createGameCardDeck();
 void createNewCardGame();
 int loadFile();
 void saveFile();
-//void splitCardDeck(int split);
-//void deleteNode();
+void splitCardDeck();
+void deleteNode();
+void moveNode();
 
 //User interface
 void userInterface();
@@ -61,19 +62,20 @@ int main() {
     //Test fil placering
     //char tempChar[] = "E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt";
     //ld(tempChar);
-    createCardDeck();
-    sd();
-    printf("breakpoint");
-    /*
+
+
+
     //Sørger for at sr funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
     createCardDeck();
+    splitCardDeck();
     createShowCardDeck();
-    userInterface();
-     */
+    printCardDeck();
+    //userInterface();
+
 }
 
     //User interfaceet
@@ -194,7 +196,7 @@ int main() {
         //Stopper når den har fundet en tom plads at ligge kortet på.
         //TODO: skal det ik være rand()%52? Vælger den ik et random number fra 0 - 51 så?
         for (int i = 0; i < 52; ++i) {
-            int randomNumber = (rand()%51);
+            int randomNumber = (rand()%52);
             //Hvis der ikke allerede ligger et kort på den position
             if(!(tempCardArray[randomNumber].rank>0)){
                 tempCardArray[randomNumber].rank=cardArray[i].rank;
@@ -493,70 +495,106 @@ int main() {
         }
         fclose(fp);
 }
-/*
-void splitCardDeck(int split){
+
+    void splitCardDeck(int split){
     //Laver 3 head nodes til de 3 bunker af kort vi kommer til at have
     struct node splitHeadArray[3];
+    //Bruges til at holde styr på om der flere kort i en af min en af bunkerne
+    int moreCards=1;
+
+    int splitNumber;
+    //Med den datastruktur vi har er vi nød til at arbejde med et andet midlertidigt kort bunke
+    struct card tempCardArray[52];
+
+    //Tjekker om spit vi får indtastet er et rigtigt tal. Hvis split ikke er et tal vi kan bruge(dermed ikke indtastet) bliver splitNumber sat til et tilfældigt tal
+    if(split<53){
+        if(split!=0){
+            splitNumber=split-1;
+        }else if(split==0){
+            splitNumber=split;
+        }
+    }else{
+        splitNumber=(rand()%52);
+    }
+
+        //Vi kopiere kortbunken over
+        for (int i = 0; i < 52; ++i) {
+            tempCardArray[i].rank=cardArray[i].rank;
+            tempCardArray[i].suit=cardArray[i].suit;
+            tempCardArray[i].isFaceUp=cardArray[i].isFaceUp;
+        }
 
     //Initialiserer linked listen på de 3 head nodes
     for (int i = 0; i < 3; ++i) {
         //printf("Adresse for i=%d %d \n",i,&headArray[i]);
-        splitHeadArray[i].nextPointer=&headArray[i];
-        splitHeadArray[i].previousPointer=&headArray[i];
+        splitHeadArray[i].nextPointer=&splitHeadArray[i];
+        splitHeadArray[i].previousPointer=&splitHeadArray[i];
+        //Head noderne har et fiktivt kort en med rank=-1 for at kunne holde styr på hvornår vi rammer head
+        struct card tempCard;
+        tempCard.rank=-1;
+        splitHeadArray[i].nodeCard=&tempCard;
     }
-    //hvis parameter ikke bliver givet
-    if(!split){
-        //første halvdel af kortene bliver lagt i en stack
-        for(int i = 0; i < 26; i++){
-            insertAfter(splitHeadArray[0].previousPointer,&cardArray[i]);
-        }
-        //anden halvdel af kortene bliver lagt i en anden stack
-        for(int i = 27; i < 52; i++){
-            insertAfter(splitHeadArray[1].previousPointer,&cardArray[i]);
-        }
-        //vi ska ha det sidste kort fra hver stack hen i den sidste stack, indtil der ik er flere kort
-        for(int i = 0; i < 52; i++){
-            if(i % 2 == 0){
-                for(int j = 0; j < 26; j++){
-                    if(splitHeadArray[0].nextPointer->nodeCard == NULL){
-                        insertAfter(splitHeadArray[2].previousPointer, (struct card *) &splitHeadArray[0].nodeCard);
-                        deleteNode();
-                    }
 
+
+        //Ligger første halvdel af kortene over i en linked liste
+        for(int i = 0; i < splitNumber; i++){
+            insertAfter(splitHeadArray[0].previousPointer,&tempCardArray[i]);
+        }
+        //Ligger anden halvdel af kortene over i en linked liste
+        for(int i = splitNumber; i < 52; i++){
+            insertAfter(splitHeadArray[1].previousPointer,&tempCardArray[i]);
+        }
+
+        //Tager det sidste kort fra hver stack hen i den sidste stack, indtil der ik er flere kort.
+        while (moreCards==1){
+            //Tjekker om begge lister er tomme
+            if(splitHeadArray[0].previousPointer->nodeCard->rank<0 && splitHeadArray[1].previousPointer->nodeCard->rank<0){
+                //Stopper while loopet
+                moreCards=0;
+            }else{
+                //Tjekker liste 0 er tom
+                if(splitHeadArray[0].previousPointer->nodeCard->rank>0){
+                    //Hvis liste ikke er tom tilføjes øverste element til liste 2
+                    moveNode(splitHeadArray[0].previousPointer,splitHeadArray[2].previousPointer);
+                } //Tjekker om liste 1 er tom
+                if(splitHeadArray[1].previousPointer->nodeCard->rank>0){
+                    //Hvis liste 1 ikke er tøm tilføjes øverste element til liste 2
+                    moveNode(splitHeadArray[1].previousPointer,splitHeadArray[2].previousPointer);
                 }
-
-            }
-            else{
-
             }
         }
-    }
-        //hvis parameter bliver givet
-    else{
 
-    }
-
+        //Kopiere liste 2 over i vores kort array
+        for (int i = 0; i < 52; ++i) {
+            //Kopiere dataen over
+            cardArray[i].rank=splitHeadArray[2].previousPointer->nodeCard->rank;
+            cardArray[i].suit=splitHeadArray[2].previousPointer->nodeCard->suit;
+            cardArray[i].isFaceUp=splitHeadArray[2].previousPointer->nodeCard->isFaceUp;
+            //Sletter noden. Vi benytter malloc
+            deleteNode(splitHeadArray[2].previousPointer);
+        }
 }
- */
 
-/*
-void deleteNode(struct node** headNode, struct node* del){
-    //base case
-    if(*headNode == NULL || del == NULL)
-        return;
-    //hvis noden der skal slettes er headnode
-    if(*headNode == del)
-        *headNode = del->nextPointer;
-    //Ændrer nextpointer hvis noden der skal slettes ikke er den sidste node
-    if(del->nextPointer != NULL)
-        del->nextPointer->previousPointer = del->previousPointer;
-    //Ændrer prevpointer hvis noden der skal slettes ikke er den første node
-    if(del->previousPointer != NULL)
-        del->previousPointer->nextPointer = del->nextPointer;
-    //Frigør memory
-    free(del);
-    return;
+void moveNode(struct node* currentNode, struct node* previousNode){
+    //Flytter en node
+    currentNode->previousPointer->nextPointer=currentNode->nextPointer;
+    currentNode->nextPointer->previousPointer=currentNode->previousPointer;
+
+    currentNode->previousPointer=previousNode;
+    currentNode->nextPointer=previousNode->nextPointer;
+
+    previousNode->nextPointer=currentNode;
+
+    currentNode->nextPointer->previousPointer=currentNode;
 }
- */
 
+void deleteNode(struct node* deleteNode){
+    //Sletter en node og samtidig sørger
 
+    //Sørger for at den næste node får ny korrekt previous pointer
+    deleteNode->nextPointer->previousPointer=deleteNode->previousPointer;
+    //Sørger for at den tidligere node får ny korrekt next pointer
+    deleteNode->previousPointer->nextPointer=deleteNode->nextPointer;
+    //Frigiver noden fra hukommelsen (malloc)
+    free(deleteNode);
+}
