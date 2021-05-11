@@ -18,6 +18,8 @@ int loadFile();
 void saveFile();
 void deleteNode();
 void moveNode();
+void extractInput();
+void emptyLinkedList();
 
 //User interface
 void userInterface();
@@ -56,6 +58,8 @@ struct node headArray[7];
 //Et array med alle vores 52 cord som der er i bunken ved start
 struct card cardArray[52];
 
+struct card headCard;
+
 void printCardDeck();
 
 int main() {
@@ -70,8 +74,9 @@ int main() {
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
-    //createCardDeck();
-    //si();
+    createCardDeck();
+
+
     userInterface();
 
 }
@@ -88,8 +93,6 @@ int main() {
         message="no message";
         while (running==1){
 
-
-
             //Startup fasen
             while (startUp==1){
                 printf("LAST Command: %s\n",lastCommand);
@@ -100,10 +103,19 @@ int main() {
                 //1 LD
                 if(0==strncmp(str,"LD",2)){
                     //TODO implemeneter så det er muligt at tage imod inputs
-                    /*printf("Hvis du ønsker at loade en fil indtast filnavn, ");
-                    char tempStr[30];
-                    gets(tempStr);*/
-                    ld();
+
+                    /*
+                    printf("Hvis du ønsker at loade en fil indtast filnavn, ellers tast enter");
+                    printf("Indtast eventuel filnavn: ");
+                    gets(str);
+                    printf("%s",str);
+                    if(strlen(str)>1){
+                        loadFile(str);
+                    }else{
+                        createCardDeck();
+                    }
+
+*/
 
                 }
                 //2 SW
@@ -114,11 +126,12 @@ int main() {
                     }else{
                         message="OK";
                     }
-
                 }
                 //3 SI
                 else if(0== strncmp(str,"SI",2)){
-                    //TODO Implementer SI med input
+                    si();
+                    message="OK";
+                    lastCommand="SI";
                 }
                 //4 SR
                 else if(0==strcmp(str,"SR")){
@@ -131,17 +144,19 @@ int main() {
                 else if(0== strncmp(str,"SD",2)){
                     //TODO implementer SD med input
 
-
                 }
                 //6 QQ
-                else if(0== strcmp(str,"QQ")){
+                else if(0==strcmp(str,"QQ")){
                     //Lukker programmet
+                    printf("Programmet lukkes");
                     running=0;
+                    startUp=0;
+                    playing=0;
                 }
                 //7 P
                 else if(0== strcmp(str,"P")){
                     //Programmet går nu fra startup fasen til spille fasen
-                    message="Du er nu i spille fasen";
+                    message="Du er nu i spille fasen. Indtast Q for at gaa tilbage til start fasen";
                     lastCommand="P";
                     startUp=0;
                     playing=1;
@@ -176,7 +191,7 @@ int main() {
 
     //Funktioner
     //1 LD<filename>
-    void ld(char *fileName){
+    void ld(char fileName[]){
     if(strlen(fileName)>1){
         loadFile(fileName);
     }else{
@@ -187,14 +202,15 @@ int main() {
 
     //2 SW
     int sw(){
-    if(cardArray[0].rank==0){
-        //Hvis der ikke er nogle kort i bunken
-        return 0;
-    }else{
+    if(cardArray[0].rank>0){
         //Hvis der er kort i bunken
         createShowCardDeck();
         printCardDeck();
         return 1;
+
+    }else{
+        //Hvis der ikke er nogle kort i bunken
+        return 0;
     }
 }
 
@@ -266,8 +282,6 @@ int main() {
                     moveNode(splitHeadArray[1].previousPointer,splitHeadArray[2].previousPointer);
                 }
             }
-            tempTestCounter= tempTestCounter+1;
-            printf("Counter: %d",tempTestCounter);
         }
 
         //Kopiere liste 2 over i vores kort array
@@ -346,16 +360,39 @@ int main() {
 }
 
     //Hjælpe funktioner
+    void extractInput(char str[]){
+    int init_size = strlen(str);
+    char delimiter[] = "*";
+    char *ptr =strtok(str,delimiter);
+
+
+}
+
     void createHeadNodes(){
-    //Laver de 7 fiktive head noder
+        headCard.rank=-1;
+        headCard.suit='f';
+        headCard.isFaceUp=false;
+        //Laver de 7 fiktive head noder
         for (int i = 0; i < 7; ++i) {
             //printf("Adresse for i=%d %d \n",i,&headArray[i]);
             headArray[i].nextPointer=&headArray[i];
             headArray[i].previousPointer=&headArray[i];
+
+            //Alle head node kommer til at indeholde et fiktivt kort med rank -1
+            headArray[i].nodeCard=&headCard;
         }
 }
 
     void createShowCardDeck(){
+        //Sørger for at linkedlisterne er tomme
+        emptyLinkedList();
+        /*
+        for (int i = 0; i < 52; ++i) {
+            int x = i%7;
+            if(headArray[x].previousPointer->nodeCard->rank!=-1){
+                deleteNode(headArray[x].previousPointer);
+            }
+        }*/
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
             insertAfter(headArray[x].previousPointer,&cardArray[i]);
@@ -363,6 +400,9 @@ int main() {
 }
 
     void createGameCardDeck(){
+    //Tømmer linked listerne:
+    emptyLinkedList();
+
     //Laver linked listen der skal bruges til spillet;
     //Det første element tiløjes
     insertAfter(headArray[0].previousPointer,&cardArray[0]);
@@ -475,7 +515,7 @@ int main() {
 
         while(nextPointer==true){
              for (int i = 0; i < 7; ++i) {
-                 if(tempCurrentNode[i].nodeCard != NULL){
+                 if(tempCurrentNode[i].nodeCard->rank!=-1){
 
                     struct card tempCard = *tempCurrentNode[i].nodeCard;
 
@@ -617,3 +657,18 @@ int main() {
         //Frigiver noden fra hukommelsen (malloc)
         free(deleteNode);
     }
+
+    void emptyLinkedList(){
+    int counter =0;
+        while (counter!=7){
+            counter=0;
+            for (int i = 0; i < 7; ++i) {
+                if(headArray[i].previousPointer->nodeCard->rank!=-1){
+                    deleteNode(headArray[i].previousPointer);
+                }else{
+                    counter=counter+1;
+                }
+            }
+
+        }
+}
