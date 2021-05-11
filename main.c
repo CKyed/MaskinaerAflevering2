@@ -178,6 +178,7 @@ int main(){
                     //Programmet går nu fra startup fasen til spille fasen
                     message="Du er nu i spille fasen. Indtast Q for at gaa tilbage til start fasen";
                     lastCommand="P";
+                    createGameCardDeck();
                     startUp=0;
                     playing=1;
                 }else{
@@ -188,10 +189,12 @@ int main(){
 
             //Spille fasen
             while(playing==1){
+                printCardDeck();
                 printf("LAST Command: %s\n",lastCommand);
                 printf("Message: %s\n",message);
                 printf( "Input: ");
                 gets(str);
+
                 //8 Q
                 if(0== strncmp(str,"Q",1)){
                     //Vi går fra spille delen tilbage til startup fasen
@@ -391,7 +394,6 @@ int main(){
 }
 
     void createShowCardDeck(){
-        //TODO 3 createShowCardDeck
         //Sørger for at linkedlisterne er tomme
         emptyLinkedList();
         for (int i = 0; i < 52; ++i) {
@@ -402,10 +404,8 @@ int main(){
 }
 
     void createGameCardDeck(){
-    //TODO 4 forabejdet til spillet med linked list
     //Tømmer linked listerne:
     emptyLinkedList();
-
     //Laver linked listen der skal bruges til spillet;
     //Det første element tiløjes
     insertAfter(headArray[0].previousPointer,&cardArray[0]);
@@ -450,7 +450,6 @@ int main(){
 }
 
     void insertAfter(struct node *prevNode,struct card* newCardPointer){
-    //TODO 2 insertAfter
        if(prevNode==NULL){
             printf("Tidligere node er NULL");
             return;
@@ -653,7 +652,6 @@ int main(){
     }
 
     void emptyLinkedList(){
-
     int counter =0;
         while (counter!=7){
             counter=0;
