@@ -194,7 +194,6 @@ int main() {
 
         //Undersøger om næste element i bunken er tomt. Hvis det er putter den kortet her, hvis ikke undersøge den det næste igen, indtil den finder et tom plads.
         //Stopper når den har fundet en tom plads at ligge kortet på.
-        //TODO: skal det ik være rand()%52? Vælger den ik et random number fra 0 - 51 så?
         for (int i = 0; i < 52; ++i) {
             int randomNumber = (rand()%52);
             //Hvis der ikke allerede ligger et kort på den position
@@ -239,8 +238,7 @@ int main() {
     if(fileName!=NULL){
         saveFile(fileName);
     }else{
-        //TODO Hvad gør vi med denne mappestruktur når vi ikke kender brugerens mapper?
-        saveFile("C:\\Users\\Public\\cards.txt");
+        saveFile("cards.txt");
     }
 
 
@@ -421,7 +419,6 @@ int main() {
 }
 
     int loadFile(char *fileName) {
-    //TODO Mangler check for om filen kan findes. Hvis den ikke findes skal den returnere 0. Kan godt undværes da vi tjekker for det i ld
     FILE  *fp;
     int c;
     //i bruges til at indsætte kortet i indexet i array
