@@ -139,10 +139,27 @@ int main(){
                 }
                 //5 SD
                 else if(0== strncmp(str,"SD",2)){
+
+
+
                     //TODO implementer SD med input
                     if(cardArray[0].rank>0){
-                        sd();
-                        message="OK";
+                        printf("Default kortlocation indtast 1. Valgfri kortlocation indtast 2 \n");
+                        gets(str);
+                        if(strcmp(str,"1")==0){
+                            sd();
+                            lastCommand="SD";
+                            message="OK";
+                        }else if(strcmp(str,"2")==0){
+                            //TODO Note: Programmet vil crashe hvis filnavnet er forkert
+                            //TODO Kan også godt crashe hvis filnavnet er for langt
+                            //Testet på CKyeds computer med: E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt
+                            printf("Indtast filsti og filnavn:");
+                            gets(str);
+                            sd(str);
+                            lastCommand="SD";
+                            message="OK";
+                        }
                     }else{
                         message="Kortdaekket er tomt";
                     }
