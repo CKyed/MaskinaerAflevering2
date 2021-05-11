@@ -142,6 +142,7 @@ int main() {
                 }
                 //5 SD
                 else if(0== strncmp(str,"SD",2)){
+
                     //TODO implementer SD med input
 
                 }
@@ -386,13 +387,6 @@ int main() {
     void createShowCardDeck(){
         //Sørger for at linkedlisterne er tomme
         emptyLinkedList();
-        /*
-        for (int i = 0; i < 52; ++i) {
-            int x = i%7;
-            if(headArray[x].previousPointer->nodeCard->rank!=-1){
-                deleteNode(headArray[x].previousPointer);
-            }
-        }*/
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
             insertAfter(headArray[x].previousPointer,&cardArray[i]);
