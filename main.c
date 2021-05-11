@@ -74,10 +74,10 @@ int main() {
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
-    createCardDeck();
 
-
-    userInterface();
+    ld("E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt");
+    sw();
+    //userInterface();
 
 }
 
@@ -88,7 +88,7 @@ int main() {
         int playing=0;
 
         char *lastCommand,*message;
-        char str[2];
+        char str[30];
         lastCommand="No last command";
         message="no message";
         while (running==1){
@@ -102,24 +102,26 @@ int main() {
 
                 //1 LD
                 if(0==strncmp(str,"LD",2)){
-                    //TODO implemeneter så det er muligt at tage imod inputs
 
-                    /*
-                    printf("Hvis du ønsker at loade en fil indtast filnavn, ellers tast enter");
-                    printf("Indtast eventuel filnavn: ");
+
+                    printf("Default kortdaek, indtast 1. Load kortdaek fra fil, indtast 2 \n");
                     gets(str);
-                    printf("%s",str);
-                    if(strlen(str)>1){
-                        loadFile(str);
-                    }else{
-                        createCardDeck();
+                    if(strcmp(str,"1")==0){
+                        ld();
+                        lastCommand="LD";
+                        message="OK";
+                    }else if(strcmp(str,"2")==0){
+                        //TODO Note: Programmet vil crashe hvis filnavnet er forkert
+                        //Testet på CKyeds computer med: E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt
+                        printf("Indtast filsti og filnavn:");
+                        gets(str);
+                        ld(str);
+                        lastCommand="LD";
+                        message="OK";
                     }
-
-*/
-
                 }
                 //2 SW
-                else if(0==strcmp(str,"SW")){
+                else if(0==strncmp(str,"SW",2)){
                     lastCommand="SW";
                     if(sw()==0){
                         message="No cards in deck";
@@ -129,25 +131,36 @@ int main() {
                 }
                 //3 SI
                 else if(0== strncmp(str,"SI",2)){
-                    si();
-                    message="OK";
                     lastCommand="SI";
+                    if(cardArray[0].rank>0){
+                        si();
+                        message="OK";
+                    }else{
+                        message="Kortdaekket er tomt";
+                    }
                 }
                 //4 SR
-                else if(0==strcmp(str,"SR")){
-                    //Tager ikke højde for om kort dækket er tomt, da det ikke står i opgaven. Vil være let er implementere, lige som i SW.
+                else if(0==strncmp(str,"SR",2)){
                     lastCommand="SR";
-                    message="OK";
-                    sr();
+                    if(cardArray[0].rank>0){
+                        message="OK";
+                        sr();
+                    }else{
+                        message="Kortdaekket er tomt";
+                    }
                 }
                 //5 SD
                 else if(0== strncmp(str,"SD",2)){
-
                     //TODO implementer SD med input
-
+                    if(cardArray[0].rank>0){
+                        sd();
+                        message="OK";
+                    }else{
+                        message="Kortdaekket er tomt";
+                    }
                 }
                 //6 QQ
-                else if(0==strcmp(str,"QQ")){
+                else if(0==strncmp(str,"QQ",2)){
                     //Lukker programmet
                     printf("Programmet lukkes");
                     running=0;
@@ -155,7 +168,7 @@ int main() {
                     playing=0;
                 }
                 //7 P
-                else if(0== strcmp(str,"P")){
+                else if(0== strncmp(str,"P",1)){
                     //Programmet går nu fra startup fasen til spille fasen
                     message="Du er nu i spille fasen. Indtast Q for at gaa tilbage til start fasen";
                     lastCommand="P";
@@ -174,7 +187,7 @@ int main() {
                 printf( "Input: ");
                 gets(str);
                 //8 Q
-                if(0== strcmp(str,"Q")){
+                if(0== strncmp(str,"Q",1)){
                     //Vi går fra spille delen tilbage til startup fasen
                     //Da vores kortspil er gemt i et array som ikke bliver brugt til andet en at opbevare dens oprindelig stadie i behøver vi ikke at gøre yderligere
                     message="Du er nu i startup fasen";
@@ -186,7 +199,6 @@ int main() {
                     message="Ukendt kommando";
                 }
             }
-
         }
     }
 
@@ -198,7 +210,6 @@ int main() {
     }else{
         createCardDeck();
     }
-
 }
 
     //2 SW
@@ -208,7 +219,6 @@ int main() {
         createShowCardDeck();
         printCardDeck();
         return 1;
-
     }else{
         //Hvis der ikke er nogle kort i bunken
         return 0;
@@ -255,7 +265,6 @@ int main() {
             splitHeadArray[i].nodeCard=&tempCard;
         }
 
-
         //Ligger første halvdel af kortene over i en linked liste
         for(int i = 0; i < splitNumber; i++){
             insertAfter(splitHeadArray[0].previousPointer,&tempCardArray[i]);
@@ -264,8 +273,6 @@ int main() {
         for(int i = splitNumber; i < 52; i++){
             insertAfter(splitHeadArray[1].previousPointer,&tempCardArray[i]);
         }
-
-        int tempTestCounter=0;
         //Tager det sidste kort fra hver stack hen i den sidste stack, indtil der ik er flere kort.
         while (moreCards==1){
             //Tjekker om begge lister er tomme
@@ -389,6 +396,7 @@ int main() {
         emptyLinkedList();
         for (int i = 0; i < 52; ++i) {
             int x = i%7;
+            cardArray[i].isFaceUp=true;
             insertAfter(headArray[x].previousPointer,&cardArray[i]);
         }
 }
@@ -564,7 +572,6 @@ int main() {
     fp = fopen(("%s",fileName),"r");
 
     while(1){
-
         c= fgetc(fp);
         printf("%c",c);
         if(feof(fp)){
@@ -597,6 +604,7 @@ int main() {
         }
 
     }
+        printf("\n");
     fclose(fp);
     return returnNumber;
 }
