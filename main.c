@@ -66,6 +66,7 @@ int main(){
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
+    //Userinterface som køre hele programmet
     userInterface();
 }
 
