@@ -1,5 +1,4 @@
 #include <stdio.h>
-//#include <vss.h>
 #include <stdbool.h>
 #include <string.h>
 #include <malloc.h>
@@ -403,6 +402,7 @@ int main(){
 }
 
     void createGameCardDeck(){
+    //TODO 4 forabejdet til spillet med linked list
     //Tømmer linked listerne:
     emptyLinkedList();
 
@@ -601,7 +601,11 @@ int main(){
 
     void saveFile(char *fileName){
         FILE *fp;
-        fp = fopen(("%s",fileName),"w+");
+        if(strlen(fileName)>5){
+            fp = fopen(("%s",fileName),"w+");
+        }else{
+            fp = fopen(("cards.txt"),"w+");
+        }
 
         for (int i = 0; i < 52; ++i) {
             char tempSuit = cardArray[i].suit;
