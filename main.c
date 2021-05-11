@@ -20,6 +20,7 @@ void deleteNode();
 void moveNode();
 void extractInput();
 void emptyLinkedList();
+void insertAfter();
 
 //User interface
 void userInterface();
@@ -30,12 +31,6 @@ void sr();
 void sd();
 void ld();
 void si();
-
-
-//Vi skal nok ikke bruge push til noget
-void push();
-void insertAfter();
-void append();
 
 struct card{
     char suit;
@@ -62,23 +57,16 @@ struct card headCard;
 
 void printCardDeck();
 
-int main() {
+int main(){
     //Test fil placering
     //char tempChar[] = "E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt";
-    //ld(tempChar);
-
-
 
     //Sørger for at sr funktionen har et nyt random seed hver gang
     time_t t;
     srand((unsigned) time(&t));
     //Vores fiktive headnodes der altid skal være der
     createHeadNodes();
-
-    ld("E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt");
-    sw();
-    //userInterface();
-
+    userInterface();
 }
 
     //User interfaceet
@@ -102,8 +90,6 @@ int main() {
 
                 //1 LD
                 if(0==strncmp(str,"LD",2)){
-
-
                     printf("Default kortdaek, indtast 1. Load kortdaek fra fil, indtast 2 \n");
                     gets(str);
                     if(strcmp(str,"1")==0){
@@ -112,6 +98,7 @@ int main() {
                         message="OK";
                     }else if(strcmp(str,"2")==0){
                         //TODO Note: Programmet vil crashe hvis filnavnet er forkert
+                        //TODO NOTE Der skal også være 52 kort i kortdækket
                         //Testet på CKyeds computer med: E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt
                         printf("Indtast filsti og filnavn:");
                         gets(str);
@@ -368,13 +355,6 @@ int main() {
 }
 
     //Hjælpe funktioner
-    void extractInput(char str[]){
-    int init_size = strlen(str);
-    char delimiter[] = "*";
-    char *ptr =strtok(str,delimiter);
-
-
-}
 
     void createHeadNodes(){
         headCard.rank=-1;
@@ -453,24 +433,18 @@ int main() {
             printf("Tidligere node er NULL");
             return;
         }
-
        //Opretter en ny node og allokere plads i memory til den
        struct node* newNode=(struct node*)malloc(sizeof (struct node));
-       //struct node newNode;
 
        newNode->nodeCard=newCardPointer;
-
        newNode->nextPointer=prevNode->nextPointer;
-
-        //nextPointer i noden før, peger nu hen til den nye nuværende node
-        prevNode->nextPointer=newNode;
-
-        //I den nye, nuværende node, peger prevNode nu hen til noden før
-        newNode->previousPointer=prevNode;
-
-        if(newNode->nextPointer!=NULL){
+       //nextPointer i noden før, peger nu hen til den nye nuværende node
+       prevNode->nextPointer=newNode;
+       //I den nye, nuværende node, peger prevNode nu hen til noden før
+       newNode->previousPointer=prevNode;
+       if(newNode->nextPointer!=NULL){
             newNode->nextPointer->previousPointer=newNode;
-        }
+       }
 }
 
     void createCardDeck(){
@@ -485,13 +459,11 @@ int main() {
             }if(i==3){
                 tempChar='S';
             }
-
             for (int i = 1; i < 14; ++i){
                 struct card tempCard;
                 tempCard.rank=i;
                 tempCard.suit=tempChar;
                 tempCard.isFaceUp=true;
-                //printf("rank: %d suit: %c isFaceUp:%d \n",tempCard.rank,tempCard.suit,tempCard.isFaceUp);
                 cardArray[i+tempInt-1]=tempCard;
             }
             tempInt=tempInt+13;
@@ -514,11 +486,9 @@ int main() {
         printf("C1\tC2\tC3\tC4\tC5\tC6\tC7");
         printf("\n\n");
 
-
         while(nextPointer==true){
              for (int i = 0; i < 7; ++i) {
                  if(tempCurrentNode[i].nodeCard->rank!=-1){
-
                     struct card tempCard = *tempCurrentNode[i].nodeCard;
 
                       if(tempCard.isFaceUp){
@@ -530,7 +500,7 @@ int main() {
                           }else if(tempCard.rank==11){
                             printf("J%c",tempCard.suit);
                           }else if(tempCard.rank==12){
-                              printf("D%c",tempCard.suit);
+                              printf("Q%c",tempCard.suit);
                           }else if(tempCard.rank==13){
                               printf("K%c",tempCard.suit);
                           }else{
@@ -593,7 +563,6 @@ int main() {
             }else if(c==75){
                 cardArray[i].rank=13;
             }
-
             counter=counter+1;
         }else if(counter==1){
             cardArray[i].suit=c;
@@ -602,7 +571,6 @@ int main() {
             counter=0;
             i=i+1;
         }
-
     }
         printf("\n");
     fclose(fp);
@@ -611,7 +579,6 @@ int main() {
 
     void saveFile(char *fileName){
         FILE *fp;
-
         fp = fopen(("%s",fileName),"w+");
 
         for (int i = 0; i < 52; ++i) {
@@ -651,7 +618,6 @@ int main() {
 
     void deleteNode(struct node* deleteNode){
         //Sletter en node og samtidig sørger
-
         //Sørger for at den næste node får ny korrekt previous pointer
         deleteNode->nextPointer->previousPointer=deleteNode->previousPointer;
         //Sørger for at den tidligere node får ny korrekt next pointer
@@ -671,6 +637,5 @@ int main() {
                     counter=counter+1;
                 }
             }
-
         }
 }
