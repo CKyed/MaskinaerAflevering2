@@ -32,6 +32,7 @@ void sd();
 void ld();
 void si();
 
+//TODO 1. datastruktur
 struct card{
     char suit;
     int rank;
@@ -98,12 +99,13 @@ int main(){
                         lastCommand="LD";
                         message="OK";
                     }else if(strcmp(str,"2")==0){
-                        //TODO Note: Programmet vil crashe hvis filnavnet er forkert
-                        //TODO NOTE Der skal også være 52 kort i kortdækket
+                        // Note: Programmet vil crashe hvis filnavnet er forkert
+                        // NOTE Der skal også være 52 kort i kortdækket
                         //Testet på CKyeds computer med: E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt
                         printf("Indtast filsti og filnavn:");
                         gets(str);
                         ld(str);
+                        startUp=1;
                         lastCommand="LD";
                         message="OK";
                     }
@@ -141,8 +143,6 @@ int main(){
                 else if(0== strncmp(str,"SD",2)){
 
 
-
-                    //TODO implementer SD med input
                     if(cardArray[0].rank>0){
                         printf("Default kortlocation indtast 1. Valgfri kortlocation indtast 2 \n");
                         gets(str);
@@ -151,17 +151,19 @@ int main(){
                             lastCommand="SD";
                             message="OK";
                         }else if(strcmp(str,"2")==0){
-                            //TODO Note: Programmet vil crashe hvis filnavnet er forkert
-                            //TODO Kan også godt crashe hvis filnavnet er for langt
+                            //Note: Programmet vil crashe hvis filnavnet er forkert
+                            //Kan også godt crashe hvis filnavnet er for langt
                             //Testet på CKyeds computer med: E:\\Studie\\MaskinaerAflevering2v2\\.idea.\\file.txt
                             printf("Indtast filsti og filnavn:");
                             gets(str);
                             sd(str);
+                            startUp=1;
                             lastCommand="SD";
                             message="OK";
                         }
                     }else{
                         message="Kortdaekket er tomt";
+                        lastCommand="SD";
                     }
                 }
                 //6 QQ
@@ -390,6 +392,7 @@ int main(){
 }
 
     void createShowCardDeck(){
+        //TODO 3 createShowCardDeck
         //Sørger for at linkedlisterne er tomme
         emptyLinkedList();
         for (int i = 0; i < 52; ++i) {
@@ -447,6 +450,7 @@ int main(){
 }
 
     void insertAfter(struct node *prevNode,struct card* newCardPointer){
+    //TODO 2 insertAfter
        if(prevNode==NULL){
             printf("Tidligere node er NULL");
             return;
@@ -558,7 +562,7 @@ int main(){
     int counter=0;
     int returnNumber;
     fp = fopen(("%s",fileName),"r");
-
+    int testCounter=0;
     while(1){
         c= fgetc(fp);
         printf("%c",c);
@@ -645,6 +649,7 @@ int main(){
     }
 
     void emptyLinkedList(){
+
     int counter =0;
         while (counter!=7){
             counter=0;
